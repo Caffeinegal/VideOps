@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - '**'
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '20'
+          cache: npm
+
+      - run: npm install
+
+      - run: npm run lint
+
+      - run: npm test
+
+      - run: npm run build
+
+      - run: npm audit
+        continue-on-error: true
+
+      - name: Summary
+        run: |
+          echo "CI completed" >> $GITHUB_STEP_SUMMARY
+          echo "- Lint: done" >> $GITHUB_STEP_SUMMARY
+          echo "- Tests: done" >> $GITHUB_STEP_SUMMARY
+          echo "- Build: done" >> $GITHUB_STEP_SUMMARY
+          echo "- Audit: done" >> $GITHUB_STEP_SUMMARY

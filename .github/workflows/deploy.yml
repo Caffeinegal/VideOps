@@ -1,20 +1,33 @@
-name: Build and Deploy
+name: Deploy
+
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
+
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v6
         with:
-          persist-credentials: false
-      - uses: actions/checkout@v2
-      - run: yarn install --frozen-lockfile
-      - run: yarn build
-      - uses: JamesIves/github-pages-deploy-action@releases/v3
+          node-version: '20'
+          cache: npm
+
+      - run: npm install
+
+      - run: npm run build
+
+      - name: Prepare Pages
+        run: |
+          mkdir -p public
+          cp -r src/index.html public/index.html || true
+
+      - uses: actions/upload-pages-artifact@v3
         with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          BRANCH: gh-pages
-          FOLDER: build
+          path: public
+
+      - uses: actions/deploy-pages@v4
