@@ -1,0 +1,6 @@
+services:
+  space-invaders:
+    build: .
+    ports:
+      - "1234:1234"
+    command: npm start
