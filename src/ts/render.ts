@@ -14,6 +14,9 @@ export interface DrawData {
 
 export function init($canvas: HTMLCanvasElement) {
   const ctx = $canvas.getContext('2d');
+  if (!ctx) {
+    throw new Error('2D canvas context is unavailable');
+  }
   ctx.globalCompositeOperation = 'source-atop';
   return {
     draw: (data: DrawData) => draw($canvas, ctx, data)

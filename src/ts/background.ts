@@ -1,6 +1,10 @@
 export function init() {
   const $canvas = document.querySelector('#background') as HTMLCanvasElement;
   const ctx = $canvas.getContext('2d');
+  if (!ctx) {
+    return;
+  }
+  const context = ctx;
 
   window.addEventListener('resize', resize);
   resize();
@@ -14,7 +18,7 @@ export function init() {
       imageData.data[i + 2] = val;
       imageData.data[i + 3] = 255;
     }
-    ctx.putImageData(imageData, 0, 0);
+    context.putImageData(imageData, 0, 0);
   }
 
   function resize() {

@@ -9,7 +9,15 @@ export function init() {
   const $gameOverScore = document.querySelector('#game-over-score');
   const $gameOverHighscore = document.querySelector('#game-over-highscore');
   const $gameOverButton = document.querySelector('#game-over-button');
-  $gameOverButton.addEventListener('click', () => location.reload());
+  if (!$score || !$gameOverScore || !$gameOverHighscore || !$gameOverButton) {
+    throw new Error('Score UI elements are missing');
+  }
+  const scoreElement = $score;
+  const gameOverScoreElement = $gameOverScore;
+  const gameOverHighscoreElement = $gameOverHighscore;
+  const gameOverButtonElement = $gameOverButton;
+
+  gameOverButtonElement.addEventListener('click', () => location.reload());
 
   return {
     addPoints
@@ -27,7 +35,7 @@ export function init() {
   function savePoints() {
     localStorage.setItem(HIGHSCORE_KEY, String(highscore));
   }
-  
+
   function loadPoints() {
     const highscore = localStorage.getItem(HIGHSCORE_KEY);
     return {
@@ -37,8 +45,8 @@ export function init() {
   }
 
   function updateUI() {
-    $score.textContent = String(score);
-    $gameOverScore.textContent = String(score);
-    $gameOverHighscore.textContent = String(highscore);
+    scoreElement.textContent = String(score);
+    gameOverScoreElement.textContent = String(score);
+    gameOverHighscoreElement.textContent = String(highscore);
   }
 }

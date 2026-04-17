@@ -5,6 +5,9 @@ const config_1 = require("./config");
 const world_1 = require("./world");
 function init($canvas) {
     const ctx = $canvas.getContext('2d');
+    if (!ctx) {
+        throw new Error('2D canvas context is unavailable');
+    }
     ctx.globalCompositeOperation = 'source-atop';
     return {
         draw: (data) => draw($canvas, ctx, data)
