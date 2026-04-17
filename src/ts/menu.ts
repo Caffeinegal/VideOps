@@ -1,4 +1,4 @@
-import { InputSource } from './input';
+import {InputSource} from './input';
 
 const INPUT_TYPE_KEY = 'psi_input_type';
 
@@ -19,7 +19,7 @@ export function init(start: () => void, stop: () => void, inputChange: (source: 
 
   const $radios = document.querySelector('#input-source') as HTMLElement;
 
-  const selectedType = [...$radios.querySelectorAll('input')].find(input => input.value == inputType);
+  const selectedType = [...$radios.querySelectorAll('input')].find((input) => input.value == inputType);
   if (selectedType && isInputSource(inputType)) {
     selectedType.checked = true;
     inputChange(inputType);
@@ -51,7 +51,7 @@ export function init(start: () => void, stop: () => void, inputChange: (source: 
     start();
   }
 
-  function handleKeyDown({ key }: KeyboardEvent) {
+  function handleKeyDown({key}: KeyboardEvent) {
     if (key == 'Escape') {
       if ($menu.hidden) {
         show();
@@ -69,7 +69,7 @@ export function init(start: () => void, stop: () => void, inputChange: (source: 
       $gameOver.hidden = false;
       window.removeEventListener('blur', show);
       window.removeEventListener('keydown', handleKeyDown);
-    }
+    },
   };
 }
 

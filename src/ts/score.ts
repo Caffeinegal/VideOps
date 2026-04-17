@@ -3,7 +3,7 @@ const HIGHSCORE_KEY = 'psi_highscore';
 export function init() {
   let {
     highscore,
-    score
+    score,
   } = loadPoints();
   const $score = document.querySelector('#score');
   const $gameOverScore = document.querySelector('#game-over-score');
@@ -20,7 +20,7 @@ export function init() {
   gameOverButtonElement.addEventListener('click', () => location.reload());
 
   return {
-    addPoints
+    addPoints,
   };
 
   function addPoints(value: number) {
@@ -40,7 +40,7 @@ export function init() {
     const highscore = localStorage.getItem(HIGHSCORE_KEY);
     return {
       score: 0,
-      highscore: highscore ? +highscore : 0
+      highscore: highscore ? +highscore : 0,
     };
   }
 

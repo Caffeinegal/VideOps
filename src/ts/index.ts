@@ -1,11 +1,10 @@
-import { log } from './debug';
-import { init as initInput, InputSource } from './input';
-import { init as initRenderer } from './render';
-import { init as initPhysics } from './physics';
-import { init as initMenu } from './menu';
-import { init as initScore } from './score';
-import { init as initBackground } from './background';
-import { WORLD_SIZE } from './config';
+import {init as initInput, InputSource} from './input';
+import {init as initRenderer} from './render';
+import {init as initPhysics} from './physics';
+import {init as initMenu} from './menu';
+import {init as initScore} from './score';
+import {init as initBackground} from './background';
+import {WORLD_SIZE} from './config';
 
 initBackground();
 
@@ -16,16 +15,16 @@ $canvas.height = WORLD_SIZE;
 let menuPause = true;
 let inputPause = true;
 
-const { getInput, setInputSource } = initInput(
-  InputSource.Mouse,
-  () => {
-    inputPause = false;
-  }, () => {
-    inputPause = true;
-  }
+const {getInput, setInputSource} = initInput(
+    InputSource.Mouse,
+    () => {
+      inputPause = false;
+    }, () => {
+      inputPause = true;
+    },
 );
 
-const { setGameOver } = initMenu(() => {
+const {setGameOver} = initMenu(() => {
   menuPause = false;
 }, () => {
   menuPause = true;
@@ -34,11 +33,11 @@ const { setGameOver } = initMenu(() => {
   setInputSource(source);
 });
 
-const { addPoints } = initScore();
+const {addPoints} = initScore();
 
-const { calculate } = initPhysics();
+const {calculate} = initPhysics();
 
-const { draw } = initRenderer($canvas);
+const {draw} = initRenderer($canvas);
 
 let lastTime = 0;
 
@@ -59,15 +58,15 @@ function update(time: number) {
     projectiles,
     enemies,
     particles,
-    gameOver
+    gameOver,
   } = calculate({
-    input, deltaTime, addPoints
+    input, deltaTime, addPoints,
   });
   draw({
     playerPosition,
     projectiles,
     enemies,
-    particles
+    particles,
   });
 
   if (gameOver) {
