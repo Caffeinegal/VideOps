@@ -9,8 +9,12 @@ on:
     branches:
       - main
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
-  test:
+  validate:
+    name: Lint, Test, Build and Audit
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -20,7 +24,51 @@ jobs:
           node-version: '20'
           cache: npm
 
-      - run: npm install
-      - run: npm run lint
-      - run: npm test
-      - run: npm run build
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run ESLint
+        run: |
+          npm run lint 2>&1 | tee lint-output.txt
+          LINT_EXIT=${PIPESTATUS[0]}
+          if [ $LINT_EXIT -ne 0 ]; then
+            echo "::error::ESLint failed. See lint-output.txt for details."
+          fi
+          exit $LINT_EXIT
+
+      - name: Run tests
+        run: |
+          npm test 2>&1 | tee test-output.txt
+          TEST_EXIT=${PIPESTATUS[0]}
+          if [ $TEST_EXIT -ne 0 ]; then
+            echo "::error::Tests failed. See test-output.txt for details."
+          fi
+          exit $TEST_EXIT
+
+      - name: Run TypeScript build
+        run: |
+          npm run build 2>&1 | tee build-output.txt
+          BUILD_EXIT=${PIPESTATUS[0]}
+          if [ $BUILD_EXIT -ne 0 ]; then
+            echo "::error::TypeScript build failed. See build-output.txt for details."
+          fi
+          exit $BUILD_EXIT
+
+      - name: Run security audit
+        run: |
+          npm audit --audit-level=high 2>&1 | tee audit-output.txt
+          AUDIT_EXIT=${PIPESTATUS[0]}
+          if [ $AUDIT_EXIT -ne 0 ]; then
+            echo "::warning::npm audit detected vulnerabilities. Review audit-output.txt."
+          fi
+          exit 0
+
+      - name: Write workflow summary
+        if: always()
+        run: |
+          echo "## CI Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- Lint: executed" >> $GITHUB_STEP_SUMMARY
+          echo "- Tests: executed" >> $GITHUB_STEP_SUMMARY
+          echo "- TypeScript build: executed" >> $GITHUB_STEP_SUMMARY
+          echo "- npm audit: executed (warning-only)" >> $GITHUB_STEP_SUMMARY
