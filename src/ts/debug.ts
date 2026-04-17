@@ -1,6 +1,6 @@
 const $debug = document.querySelector('#debug');
 
-export function log(...data: any[]) {
+export function log(...data: unknown[]) {
   if (!$debug) {
     return;
   }

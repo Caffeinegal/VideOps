@@ -12,5 +12,16 @@ module.exports = {
     ecmaVersion: "latest",
     sourceType: "module",
   },
-  rules: {},
+  rules: {
+    'require-jsdoc': 'off',
+    'max-len': 'off',
+  },
+  overrides: [
+    {
+      files: ['src/tests/**/*.js'],
+      rules: {
+        '@typescript-eslint/no-require-imports': 'off',
+      },
+    },
+  ],
 };
