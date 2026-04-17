@@ -5,7 +5,7 @@
     "zip": "rm -f bundle.zip && cd build && bestzip ../bundle.zip *",
     "bundle": "npm run build:parcel && npm run zip",
     "test": "jest",
-    "lint": "eslint src/**/*.ts tests/**/*.js",
+    "lint": "eslint src/**/*.ts tests/**/*.js --no-error-on-unmatched-pattern",
     "build": "tsc"
   },
   "devDependencies": {
