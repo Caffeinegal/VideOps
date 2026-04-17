@@ -3,6 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.init = init;
 const input_1 = require("./input");
 const INPUT_TYPE_KEY = 'psi_input_type';
+function isInputSource(value) {
+    return value === input_1.InputSource.Gamepad || value === input_1.InputSource.Mouse || value === input_1.InputSource.Mobile;
+}
 function init(start, stop, inputChange) {
     const inputType = localStorage.getItem(INPUT_TYPE_KEY);
     const $menu = document.querySelector('#menu');
@@ -12,18 +15,21 @@ function init(start, stop, inputChange) {
     inputChange(input_1.InputSource.Mouse);
     const $radios = document.querySelector('#input-source');
     const selectedType = [...$radios.querySelectorAll('input')].find(input => input.value == inputType);
-    if (selectedType) {
+    if (selectedType && isInputSource(inputType)) {
         selectedType.checked = true;
-        inputChange(input_1.InputSource[inputType]);
+        inputChange(inputType);
     }
     $radios.addEventListener('change', () => {
         const selected = $radios.querySelector('input:checked').value;
-        localStorage.setItem(INPUT_TYPE_KEY, input_1.InputSource[selected]);
-        inputChange(input_1.InputSource[selected]);
+        if (!isInputSource(selected)) {
+            return;
+        }
+        localStorage.setItem(INPUT_TYPE_KEY, selected);
+        inputChange(selected);
     });
     window.addEventListener('blur', show);
     function onStart() {
-        document.querySelector('html').requestFullscreen().catch(console.error);
+        document.documentElement.requestFullscreen().catch(console.error);
         hide();
     }
     function show() {

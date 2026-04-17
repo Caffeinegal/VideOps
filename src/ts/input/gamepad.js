@@ -1,6 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.init = init;
+const EMPTY_INPUT = {
+    axes: {
+        x: 0,
+        y: 0,
+    },
+    fire: false,
+};
 function init() {
     let bready = () => { };
     let bstop = () => { };
@@ -31,16 +38,16 @@ function init() {
 function getInput() {
     const gamepads = navigator.getGamepads();
     if (!gamepads)
-        return;
-    const gamepad = Object.values(gamepads).find(gp => gp);
+        return EMPTY_INPUT;
+    const gamepad = Object.values(gamepads).find((gp) => gp);
     if (!gamepad)
-        return;
+        return EMPTY_INPUT;
     const axes = {
         x: gamepad.axes[0],
         y: gamepad.axes[1]
     };
     return {
         axes,
-        fire: [0, 5, 7].map(i => gamepad.buttons[i]).some(button => button.pressed)
+        fire: [0, 5, 7].map((i) => gamepad.buttons[i]).some((button) => button.pressed),
     };
 }

@@ -2,6 +2,10 @@ import { InputSource } from './input';
 
 const INPUT_TYPE_KEY = 'psi_input_type';
 
+function isInputSource(value: string | null): value is InputSource {
+  return value === InputSource.Gamepad || value === InputSource.Mouse || value === InputSource.Mobile;
+}
+
 export function init(start: () => void, stop: () => void, inputChange: (source: InputSource) => void) {
   const inputType = localStorage.getItem(INPUT_TYPE_KEY);
 
@@ -16,21 +20,24 @@ export function init(start: () => void, stop: () => void, inputChange: (source: 
   const $radios = document.querySelector('#input-source') as HTMLElement;
 
   const selectedType = [...$radios.querySelectorAll('input')].find(input => input.value == inputType);
-  if (selectedType) {
+  if (selectedType && isInputSource(inputType)) {
     selectedType.checked = true;
-    inputChange(InputSource[inputType]);
+    inputChange(inputType);
   }
 
   $radios.addEventListener('change', () => {
     const selected = ($radios.querySelector('input:checked') as HTMLInputElement).value;
-    localStorage.setItem(INPUT_TYPE_KEY, InputSource[selected]);
-    inputChange(InputSource[selected]);
+    if (!isInputSource(selected)) {
+      return;
+    }
+    localStorage.setItem(INPUT_TYPE_KEY, selected);
+    inputChange(selected);
   });
 
   window.addEventListener('blur', show);
 
   function onStart() {
-    document.querySelector('html').requestFullscreen().catch(console.error);
+    document.documentElement.requestFullscreen().catch(console.error);
     hide();
   }
 

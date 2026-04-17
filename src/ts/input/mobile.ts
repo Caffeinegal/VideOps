@@ -26,9 +26,11 @@ export function init(): InitFunctionOutput {
     handle.addEventListener('touchstart', onHandleGrab);
     handle.addEventListener('touchend', onHandleRelease);
     plane.addEventListener('touchmove', onMove);
-    fireButton.addEventListener('touchstart', onFireGrab, false);
-    fireButton.addEventListener('touchend', onFireRelease, false);
-    fireButton.removeEventListener('touchcancel', onFireRelease, false);
+    if (fireButton) {
+      fireButton.addEventListener('touchstart', onFireGrab, false);
+      fireButton.addEventListener('touchend', onFireRelease, false);
+      fireButton.removeEventListener('touchcancel', onFireRelease, false);
+    }
 
     plane.hidden = false;
     ready();
@@ -38,9 +40,11 @@ export function init(): InitFunctionOutput {
     handle.removeEventListener('touchstart', onHandleGrab);
     handle.removeEventListener('touchend', onHandleRelease);
     plane.removeEventListener('touchmove', onMove);
-    fireButton.removeEventListener('touchstart', onFireGrab);
-    fireButton.removeEventListener('touchend', onFireRelease);
-    fireButton.removeEventListener('touchcancel', onFireRelease);
+    if (fireButton) {
+      fireButton.removeEventListener('touchstart', onFireGrab);
+      fireButton.removeEventListener('touchend', onFireRelease);
+      fireButton.removeEventListener('touchcancel', onFireRelease);
+    }
     plane.hidden = true;
   }
 

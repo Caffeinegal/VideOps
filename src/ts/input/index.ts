@@ -22,8 +22,8 @@ export enum InputSource {
   Mobile = 'Mobile'
 }
 
-let inputSource: InputSource = null;
-let inputFunction: InitFunctionOutput = null;
+let inputSource: InputSource | null = null;
+let inputFunction: InitFunctionOutput | null = null;
 
 export function init(source: InputSource, ready: () => void, stop: () => void) {
   const gamepad = initGamepad();
@@ -54,14 +54,25 @@ export function init(source: InputSource, ready: () => void, stop: () => void) {
         return mobile;
       case InputSource.Mouse:
         return mouse;
+      default:
+        return mouse;
     }
   }
 }
 
 function getInput(): Input {
+  if (!inputFunction) {
+    return {
+      axes: {
+        x: 0,
+        y: 0,
+      },
+      fire: false,
+    };
+  }
   return inputFunction.getInput();
 }
 
 function getInputSource(): InputSource {
-  return inputSource;
+  return inputSource || InputSource.Mouse;
 }

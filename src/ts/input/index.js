@@ -40,12 +40,23 @@ function init(source, ready, stop) {
                 return mobile;
             case InputSource.Mouse:
                 return mouse;
+            default:
+                return mouse;
         }
     }
 }
 function getInput() {
+    if (!inputFunction) {
+        return {
+            axes: {
+                x: 0,
+                y: 0,
+            },
+            fire: false,
+        };
+    }
     return inputFunction.getInput();
 }
 function getInputSource() {
-    return inputSource;
+    return inputSource || InputSource.Mouse;
 }
