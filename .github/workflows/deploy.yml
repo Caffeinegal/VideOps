@@ -1,11 +1,15 @@
 name: Deploy
-#test
 
 on:
   workflow_dispatch:
-  push:
+  workflow_run:
+    workflows: ['CI']
+    types: [completed]
     branches:
       - main
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 permissions:
   contents: read
@@ -15,6 +19,7 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
     steps:
       - uses: actions/checkout@v4
 
@@ -23,11 +28,27 @@ jobs:
           node-version: '20'
           cache: npm
 
-      - run: npm install
-      - run: npm run build:parcel
+      - name: Install dependencies
+        run: npm ci
 
-      - uses: actions/upload-pages-artifact@v3
+      - name: Build static site
+        run: npm run build:parcel
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
         with:
           path: build
 
-      - uses: actions/deploy-pages@v4
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+      - name: Write deployment summary
+        run: |
+          echo "## Deploy Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- GitHub Pages deployment completed" >> $GITHUB_STEP_SUMMARY
+          echo "- URL: ${{ steps.deployment.outputs.page_url }}" >> $GITHUB_STEP_SUMMARY
