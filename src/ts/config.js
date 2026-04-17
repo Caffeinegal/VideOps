@@ -1,0 +1,17 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ENEMY_SPAWN_COOLDOWN = exports.CENTER_RADIUS = exports.PARTICLE_SPEED = exports.PARTICLE_SIZE = exports.PARTICLE_LIFESPAN = exports.PLAYER_OFFSET = exports.PLAYER_SIZE = exports.WORLD_SIZE = exports.ENEMY_SIZE = exports.GAMEPAD_EPSILON = exports.PLAYER_SPEED = exports.PROJECTILE_SIZE = exports.PROJECTILE_SPEED = exports.FIRE_COOLDOWN = void 0;
+exports.FIRE_COOLDOWN = 0.1;
+exports.PROJECTILE_SPEED = 1000;
+exports.PROJECTILE_SIZE = 5;
+exports.PLAYER_SPEED = 10;
+exports.GAMEPAD_EPSILON = 0.3;
+exports.ENEMY_SIZE = 20;
+exports.WORLD_SIZE = 1000;
+exports.PLAYER_SIZE = 20;
+exports.PLAYER_OFFSET = 50;
+exports.PARTICLE_LIFESPAN = 1;
+exports.PARTICLE_SIZE = 5;
+exports.PARTICLE_SPEED = 5;
+exports.CENTER_RADIUS = 70;
+exports.ENEMY_SPAWN_COOLDOWN = 1;
